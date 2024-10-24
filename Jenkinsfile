@@ -27,7 +27,6 @@ pipeline {
         }
 
         stage('Tests') {
-            parallel {
                 stage('Unit tests') {
                     agent {
                         docker {
@@ -37,17 +36,11 @@ pipeline {
                     }
                     steps {
                         sh '''
+                            test -f build/index.html
                             npm test
                         '''
                     }
                 }
-            }
-        }
-        
-        post {
-            always {
-                junit 'jest-results/junit.xml'
-            }
         }
 
         stage('Deploy') {
